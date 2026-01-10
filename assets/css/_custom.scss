@@ -12,18 +12,18 @@ html.dark {
   --borderColor-default: #404040 !important;
   --bgColor-neutral-muted: rgba(118, 118, 118, 0.4) !important;
   --selection-bgColor: rgba(64, 64, 64, 0.7) !important;
-  
+
   // 按钮颜色
   --button-default-bgColor-rest: #2d2d2d !important;
   --button-default-bgColor-hover: #363636 !important;
-  
+
   // 文字和链接颜色
   --fgColor-default: #e6e6e6 !important;
   --fgColor-secondary: #d4d4d4 !important;
   --fgColor-muted: #8d8d8d !important;
   --fgColor-link: #a0a0a0 !important;
   --fgColor-link-hover: #c0c0c0 !important;
-  
+
   // 全局颜色
   --global-background-color: var(--bgColor-default) !important;
   --global-font-color: var(--fgColor-default) !important;
@@ -31,20 +31,20 @@ html.dark {
   --global-link-color: var(--fgColor-default) !important;
   --global-link-hover-color: #ffffff !important;
   --global-border-color: var(--borderColor-default) !important;
-  
+
   // 头部颜色
   --header-background-color: var(--bgColor-secondary) !important;
   --header-hover-color: #ffffff !important;
-  
+
   // 表格颜色
   --table-background-color: var(--bgColor-default) !important;
   --table-thead-color: var(--bgColor-secondary) !important;
   --table-border-color: var(--borderColor-default) !important;
-  
+
   // 引用块颜色
   --blockquote-color: #404040 !important;
   --blockquote-bg-color: rgba(64, 64, 64, 0.2) !important;
-  
+
   // 代码颜色
   --code-background-color: #2d2d2d !important;
   --code-header-color: #363636 !important;
@@ -53,17 +53,171 @@ html.dark {
   --code-background-color-code-header: var(--code-background-color-darken-6) !important;
   --code-background-color-code-hl: #4d4d4d !important;
   --code-info-color: #8d8d8d !important;
-  
+
   // 其他元素颜色
   --friend-link-background-color: var(--bgColor-secondary) !important;
   --friend-link-color: var(--fgColor-link) !important;
   --friend-link-hover-color: var(--fgColor-link-hover) !important;
-  
+
   --related-background-color: var(--bgColor-secondary) !important;
   --related-color: var(--fgColor-default) !important;
   --related-hover-color: #ffffff !important;
-  
+
   --showcase-background-color: var(--bgColor-secondary) !important;
   --showcase-color: var(--fgColor-default) !important;
   --showcase-hover-color: #ffffff !important;
+
+  // Glassmorphism 2.0 Tokens
+  --glass-bg: rgba(28, 28, 28, 0.75) !important;
+  --glass-border: rgba(255, 255, 255, 0.1) !important;
+  --glass-blur: 16px !important;
+
+  // 2026 Border Gradient
+  --border-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)) !important;
+}
+
+html {
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-blur: 12px;
+}
+
+// ==============================
+// Modern Makeover (2026 Style)
+// ==============================
+
+// Glassmorphism 2.0 Application
+header,
+#toc-auto,
+.search-dropdown.desktop .dropdown-menu,
+#toc-dialog,
+.fixed-button {
+  backdrop-filter: blur(var(--glass-blur, 10px)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur, 10px)) !important;
+  background-color: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+html.dark {
+
+  header,
+  #toc-auto,
+  .search-dropdown.desktop .dropdown-menu,
+  #toc-dialog,
+  .fixed-button {
+    border-image-source: var(--border-gradient);
+    border-image-slice: 1;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+}
+
+// Micro-interactions for Icons
+.search-toggle,
+.theme-switch,
+.menu-item i,
+.menu-item svg,
+.fixed-button i,
+.fixed-button svg {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important;
+
+  &:hover {
+    transform: scale(1.2) translateY(-2px) !important;
+    color: var(--global-link-hover-color) !important;
+  }
+
+  &:active {
+    transform: scale(0.9) !important;
+  }
+}
+
+// Search Button Specific Interaction
+.search-button.search-toggle svg {
+  transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6) !important;
+}
+
+.open .search-button.search-toggle svg {
+  transform: rotate(90deg) scale(1.1) !important;
+}
+
+// Bento Grid - Footer Application
+.footer-container {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem 2rem !important;
+  text-align: left !important;
+
+  .footer-line {
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.75rem;
+    background: var(--bgColor-accent-muted, rgba(0, 0, 0, 0.03));
+    border-radius: 20px;
+    border: 1px solid var(--glass-border, rgba(0, 0, 0, 0.05));
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: translateY(-8px);
+      background: var(--bgColor-accent-emphasis, rgba(0, 0, 0, 0.06));
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      border-color: var(--global-link-hover-color);
+    }
+
+    // Asymmetric Bento effect
+    &:first-child {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--bgColor-accent-muted), var(--bgColor-secondary));
+
+      @media (max-width: 900px) {
+        grid-column: span 1;
+      }
+    }
+
+    // Hide separators in Bento mode
+    &::after {
+      display: none !important;
+    }
+
+    .icp-splitter {
+      display: none !important;
+    }
+
+    .footer-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--fgColor-muted);
+      margin-bottom: 0.5rem;
+      display: block;
+      opacity: 0.6;
+    }
+
+    .footer-block-content {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--fgColor-default);
+
+      a {
+        color: var(--global-link-color);
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: var(--global-link-hover-color);
+          text-decoration: none;
+        }
+      }
+    }
+
+    .stack-links,
+    .copyright-info,
+    .stats-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
 }
