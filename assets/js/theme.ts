@@ -7,39 +7,18 @@ declare global {
     config?: {
       table?: {
         sort?: boolean;
-      }
-    }
+      };
+    };
   }
 }
 
-/* eslint-disable no-new */
-/* eslint-disable no-undef */
 const Tablesort = require("tablesort");
-// const autocomplete = require('autocomplete.js')
-
-function escape(unsafe) {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-function forEach(elements, handler) {
-  elements = elements || [];
-  for (let i = 0; i < elements.length; i++) handler(elements[i]);
-}
 
 function getScrollTop() {
   return (
     (document.documentElement && document.documentElement.scrollTop) ||
     document.body.scrollTop
   );
-}
-
-function isMobileWindow() {
-  return window.matchMedia("only screen and (max-width: 680px)").matches;
 }
 
 /**
@@ -254,10 +233,9 @@ function initSearch() {
   } else {
     window._searchDesktopOnce = true;
     // Turn on the mask when clicking on the search button
-    searchToggle.addEventListener("click", () => {
+    function loadSearchScript() {
       loadScript("autocomplete-script", autocompleteJs, () => {
         initAutosearch();
-        searchInput.focus();
       });
       if (window.config?.search?.type === "algolia") {
         loadScript("algolia-script", algoliaJs, null);
@@ -266,6 +244,10 @@ function initSearch() {
       } else {
         loadPagefind();
       }
+    }
+    searchToggle.addEventListener("mouseover", loadSearchScript, { once: true }); 
+    searchToggle.addEventListener("click", () => {
+      loadSearchScript();
       document.body.classList.add("blur");
       header.classList.add("open");
       searchInput.focus();
@@ -491,7 +473,7 @@ function initSearch() {
           suggestion: ({ title, uri, date, context }) =>
             `<div><a href=${uri}><span class="suggestion-title">${title}</span></a><span class="suggestion-date">${date}</span></div><div class="suggestion-context">${context}</div>`,
           empty: ({ query }) =>
-            `<div class="search-empty">${searchConfig.noResultsFound}: <span class="search-query">"${escape(query)}"</span></div>`,
+            `<div class="search-empty">${searchConfig.noResultsFound}: <span class="search-query">"${query}"</span></div>`,
           footer: () => {
             const { searchType, icon, href } =
               searchConfig.type === "algolia"
@@ -511,7 +493,7 @@ function initSearch() {
                       icon: "",
                       href: "https://pagefind.app",
                     };
-            return `<div class="search-footer">Search by <a href="${href}" rel="noopener noreffer" target="_blank">${icon} ${searchType}</a></div>`;
+            return `<div class="search-footer">Search by <a href="${href}" rel="noopener noreferrer" target="_blank">${icon} ${searchType}</a></div>`;
           },
         },
       },
@@ -560,7 +542,7 @@ function initDetails() {
     )[0] as HTMLDivElement;
     const content = $summary.nextElementSibling as HTMLDivElement;
     if ($details.classList.contains("open")) {
-      content.style.maxHeight = content.scrollHeight + "px";
+      content.style.maxHeight = "fit-content";
     }
     $summary.addEventListener(
       "click",
@@ -568,7 +550,7 @@ function initDetails() {
         if ($details.classList.contains("open")) {
           content.style.maxHeight = "0px";
         } else {
-          content.style.maxHeight = content.scrollHeight + "px";
+          content.style.maxHeight = "fit-content";
         }
         $details.classList.toggle("open");
       },
@@ -594,7 +576,9 @@ function initLightGallery() {
 
 function initTablesort() {
   if (window.config?.table?.sort) {
-    document.querySelectorAll(".content table").forEach((table) => new Tablesort(table));
+    document
+      .querySelectorAll(".content table")
+      .forEach((table) => new Tablesort(table));
   }
 }
 
@@ -703,12 +687,27 @@ function initToc() {
   }
 }
 
+function initTocDialog() {
+  const dialog: HTMLDialogElement | null =
+    document.querySelector("#toc-dialog");
+  const openButton = document.querySelector("#toc-drawer-button");
+  if (!dialog || !openButton) {
+    return;
+  }
+  openButton.addEventListener("click", () => {
+    dialog.showModal();
+    document.activeElement?.blur();
+  });
+  dialog.addEventListener("click", (e) => {
+    dialog.close();
+  });
+}
 function initMapbox() {
   if (window.config.mapbox) {
     mapboxgl.accessToken = window.config.mapbox.accessToken;
     mapboxgl.setRTLTextPlugin(window.config.mapbox.RTLTextPlugin);
     window._mapboxArr = window._mapboxArr || [];
-    forEach(document.getElementsByClassName("mapbox"), ($mapbox) => {
+    Array.from(document.getElementsByClassName("mapbox")).forEach(($mapbox) => {
       const {
         lng,
         lat,
@@ -757,7 +756,7 @@ function initMapbox() {
       window._mapboxArr.push(mapbox);
     });
     window._mapboxOnSwitchTheme = () => {
-      forEach(window._mapboxArr, (mapbox) => {
+      window._mapboxArr.forEach((mapbox) => {
         const $mapbox = mapbox.getContainer();
         const { lightStyle, darkStyle } = window.config.data[$mapbox.id];
         mapbox.setStyle(window.isDark ? darkStyle : lightStyle);
@@ -873,8 +872,8 @@ function onClickMask() {
 function initCodeblocks() {
   document.querySelectorAll(".code-block").forEach((codeBlock) => {
     // the queries are guaranteed to be successful
-    const titleBar = codeBlock.querySelector(
-      "div.code-block-title-bar",
+    const titleButton = codeBlock.querySelector(
+      "button.code-block-button",
     ) as HTMLDivElement;
     const chroma = codeBlock.querySelector("code.chroma") as HTMLElement;
     const copyCodeButton = codeBlock.querySelector(
@@ -893,10 +892,10 @@ function initCodeblocks() {
       "button.line-number-button",
     ) as HTMLButtonElement;
 
-    chroma.style.maxHeight = chroma.scrollHeight + 10 + "px";
+    chroma.style.maxHeight = "fit-content";
 
     // handle expanding and collapsing code blocks
-    titleBar.addEventListener("click", () => {
+    titleButton.addEventListener("click", () => {
       codeBlock.classList.toggle("is-open");
       codeBlock.classList.toggle("is-closed");
     });
@@ -917,7 +916,6 @@ function initCodeblocks() {
     wrapCodeButton?.addEventListener("click", () => {
       chroma.style.maxHeight = "fit-content";
       codeBlock.classList.toggle("is-wrap");
-      chroma.style.maxHeight = chroma.scrollHeight + 10 + "px";
     });
 
     toggleLineNumbersButton.addEventListener("click", () => {
@@ -926,7 +924,7 @@ function initCodeblocks() {
 
     addEventListener("beforeprint", (_) => {
       if (codeBlock.classList.contains("is-closed")) {
-        titleBar.click();
+        titleButton.click();
       }
       if (!codeBlock.classList.contains("is-wrap")) {
         wrapCodeButton.click();
@@ -942,7 +940,6 @@ function init() {
   window.scrollEventSet = new Set();
   window.resizeEventSet = new Set();
   window.clickMaskEventSet = new Set();
-  if (window.objectFitImages) objectFitImages();
   initMenuMobile();
   initSwitchTheme();
   initSelectTheme();
@@ -955,6 +952,7 @@ function init() {
   initTypeit();
   initMapbox();
   initToc();
+  initTocDialog();
   onScroll();
   onResize();
   onClickMask();

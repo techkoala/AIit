@@ -1,0 +1,72 @@
+{{- /* Check theme isDark before body rendering */ -}}
+{{- $theme := .Site.Params.defaulttheme -}}
+<script type="text/javascript">
+    function setTheme(theme) {
+        document.body.setAttribute('theme', theme); 
+        document.documentElement.className = theme;
+        document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');
+        if (theme === 'light') {
+            document.documentElement.classList.remove('tw-dark')
+        } else {
+            document.documentElement.classList.add('tw-dark')
+        }
+        window.theme = theme;   
+        window.isDark = window.theme !== 'light';
+        
+        // 更新meta theme-color
+        let metaColors = {'light': '#f8f8f8','dark': '#161b22'};
+        getMeta('theme-color').content = metaColors[theme];
+    }
+
+    function saveTheme(theme) {
+        window.localStorage && localStorage.setItem('theme', theme);
+    }
+
+    function getMeta(metaName) {
+        const metas = document.getElementsByTagName('meta');
+        for (let i = 0; i < metas.length; i++) 
+            if (metas[i].getAttribute('name') === metaName) return metas[i];
+        return '';
+    }
+
+    // 监听系统主题变化
+    function watchSystemTheme() {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleThemeChange = e => {
+            if (localStorage.getItem('theme') === 'auto') {
+                setTheme(e.matches ? 'dark' : 'light');
+            }
+        };
+        
+        // 兼容新旧版本的 matchMedia API
+        if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', handleThemeChange);
+        } else if (mediaQuery.addListener) {
+            mediaQuery.addListener(handleThemeChange);
+        }
+        
+        return mediaQuery;
+    }
+
+    // 初始化主题
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+            // 使用保存的主题
+            setTheme(savedTheme);
+        } else if (savedTheme === 'auto' || !savedTheme) {
+            // 使用系统主题
+            setTheme(systemDark ? 'dark' : 'light');
+            saveTheme('auto');
+        }
+        
+        // 开始监听系统主题变化
+        watchSystemTheme();
+    }
+
+    // 初始化主题
+    initTheme();
+    window.switchThemeEventSet = new Set();
+</script>

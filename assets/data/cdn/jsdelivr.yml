@@ -42,8 +42,6 @@ libFiles:
   mermaidJS: mermaid@8.13.3/dist/mermaid.min.js
   # meting@2.0.1 https://github.com/metowolf/MetingJS
   metingJS: meting@2.0.1/dist/Meting.min.js
-  # object-fit-images@3.2.4 https://github.com/fregante/object-fit-images
-  objectFitImagesJS: object-fit-images@3.2.4/dist/ofi.min.js
   # sharer.js@0.4.2 https://github.com/ellisonleao/sharer.js
   sharerJS: sharer.js@0.4.2/sharer.min.js
   # twemoji@13.1.0 https://github.com/twitter/twemoji
@@ -77,3 +75,8 @@ libFiles:
   artalkLiteCSS: "artalk@2.5.5/dist/ArtalkLite.css"
   artalkPluginKaTeXJS: "@artalk/plugin-katex@0.1.5/dist/artalk-plugin-katex.js"
   artalkPluginLightboxJS: "@artalk/plugin-lightbox@0.1.1/dist/artalk-plugin-lightbox.js"
+  # plantuml-encoder@1.4.0
+  plantumlEncoderJS: plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js
+  # wavedrom@3.5.0 only default skin would be loaded!
+  wavedromJS: wavedrom@3.5.0/dist/wavedrom.min.js
+  wavedromDefaultSkinJS: wavedrom@3.5.0/skins/default.js
