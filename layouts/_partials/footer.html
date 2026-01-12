@@ -8,7 +8,7 @@
                 {{- with .Site.Params.footer.custom -}}
                 {{- safeHTML . -}}
                 {{- else -}}
-                {{ .Site.Description | default .Site.Title }}
+                {{ .Site.Params.description | default .Site.Title }}
                 {{- end -}}
             </div>
         </div>
