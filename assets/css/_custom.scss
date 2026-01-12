@@ -1,7 +1,51 @@
 // ==============================
-// Custom style
-// 自定义样式
+// Custom style - Apple Liquid Glass Design
+// 自定义样式 - 苹果液态玻璃设计
 // ==============================
+
+// ==============================
+// 1. Liquid Glass Core Tokens
+// ==============================
+:root {
+  // Liquid Glass 基础效果
+  --liquid-blur: 24px;
+  --liquid-saturation: 180%;
+  --liquid-brightness: 1.05;
+
+  // 多层透明度
+  --liquid-bg-primary: rgba(255, 255, 255, 0.72);
+  --liquid-bg-secondary: rgba(255, 255, 255, 0.45);
+
+  // 光影边框（模拟折射）
+  --liquid-border-light: rgba(255, 255, 255, 0.6);
+  --liquid-border-dark: rgba(0, 0, 0, 0.08);
+
+  // 内发光效果
+  --liquid-inner-glow: inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+
+  // 外阴影（悬浮感）
+  --liquid-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  --liquid-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+
+  // 高光渐变
+  --liquid-highlight: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%);
+
+  // 强调色渐变
+  --accent-primary: hsl(220, 85%, 65%);
+  --accent-secondary: hsl(260, 75%, 70%);
+  --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+
+  // 保持向后兼容
+  --glass-bg: var(--liquid-bg-primary);
+  --glass-border: var(--liquid-border-dark);
+  --glass-blur: var(--liquid-blur);
+}
 
 html.dark {
   // 基础颜色
@@ -67,70 +111,160 @@ html.dark {
   --showcase-color: var(--fgColor-default) !important;
   --showcase-hover-color: #ffffff !important;
 
-  // Glassmorphism 2.0 Tokens
-  --glass-bg: rgba(28, 28, 28, 0.75) !important;
-  --glass-border: rgba(255, 255, 255, 0.1) !important;
-  --glass-blur: 16px !important;
+  // Liquid Glass 暗色模式覆盖
+  --liquid-bg-primary: rgba(40, 40, 45, 0.78);
+  --liquid-bg-secondary: rgba(50, 50, 55, 0.55);
+  --liquid-border-light: rgba(255, 255, 255, 0.15);
+  --liquid-border-dark: rgba(0, 0, 0, 0.3);
+  --liquid-inner-glow: inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+  --liquid-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  --liquid-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  --liquid-highlight: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 100%);
 
-  // 2026 Border Gradient
+  // 向后兼容
+  --glass-bg: var(--liquid-bg-primary);
+  --glass-border: var(--liquid-border-dark);
   --border-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)) !important;
 }
 
-html {
-  --glass-bg: rgba(255, 255, 255, 0.75);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-blur: 12px;
-}
-
 // ==============================
-// Modern Makeover (2026 Style)
+// 2. Liquid Glass Core Application
 // ==============================
+header#header-desktop,
+header#header-mobile .header-container {
+  background: var(--liquid-bg-primary) !important;
+  backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-saturation)) brightness(var(--liquid-brightness)) !important;
+  -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-saturation)) brightness(var(--liquid-brightness)) !important;
 
-// Glassmorphism 2.0 Application
-header,
-#toc-auto,
-.search-dropdown.desktop .dropdown-menu,
-#toc-dialog,
-.fixed-button {
-  backdrop-filter: blur(var(--glass-blur, 10px)) !important;
-  -webkit-backdrop-filter: blur(var(--glass-blur, 10px)) !important;
-  background-color: var(--glass-bg) !important;
-  border: 1px solid var(--glass-border) !important;
-}
+  // 多层边框模拟折射
+  border: 1px solid var(--liquid-border-light) !important;
+  border-bottom-color: var(--liquid-border-dark) !important;
+  border-right-color: var(--liquid-border-dark) !important;
 
-html.dark {
+  // 内发光 + 外阴影
+  box-shadow: var(--liquid-inner-glow), var(--liquid-shadow) !important;
 
-  header,
-  #toc-auto,
-  .search-dropdown.desktop .dropdown-menu,
-  #toc-dialog,
-  .fixed-button {
-    border-image-source: var(--border-gradient);
-    border-image-slice: 1;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  // 圆角（桌面端）
+  border-radius: 0 0 20px 20px !important;
+
+  // 过渡动画
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+
+  &:hover {
+    box-shadow: var(--liquid-inner-glow), var(--liquid-shadow-hover) !important;
   }
 }
 
-// Micro-interactions for Icons
+// 移动端 header 不需要底部圆角
+header#header-mobile {
+  border-radius: 0 !important;
+
+  .header-container {
+    border-radius: 0 !important;
+  }
+}
+
+#toc-auto,
+#toc-dialog,
+.search-dropdown .dropdown-menu {
+  background: var(--liquid-bg-secondary) !important;
+  backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-saturation)) !important;
+  -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-saturation)) !important;
+  border: 1px solid var(--liquid-border-light) !important;
+  border-bottom-color: var(--liquid-border-dark) !important;
+  border-right-color: var(--liquid-border-dark) !important;
+  box-shadow: var(--liquid-inner-glow), var(--liquid-shadow) !important;
+  border-radius: 16px !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.fixed-button {
+  background: var(--liquid-bg-secondary) !important;
+  backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-saturation)) !important;
+  -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(var(--liquid-saturation)) !important;
+  border: 1px solid var(--liquid-border-light) !important;
+  box-shadow: var(--liquid-inner-glow), var(--liquid-shadow) !important;
+  border-radius: 50% !important;
+  width: 48px !important;
+  height: 48px !important;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+
+  &:hover {
+    transform: scale(1.1) translateY(-4px) !important;
+    box-shadow: var(--liquid-inner-glow), var(--liquid-shadow-hover) !important;
+  }
+
+  // 涟漪效果
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at center,
+        rgba(255, 255, 255, 0.3) 0%,
+        transparent 60%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.4s ease;
+    pointer-events: none;
+  }
+
+  &:active::after {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+// ==============================
+// 3. Enhanced Micro-interactions
+// ==============================
+@keyframes spring-bounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.15);
+  }
+
+  50% {
+    transform: scale(0.95);
+  }
+
+  75% {
+    transform: scale(1.05);
+  }
+}
+
 .search-toggle,
 .theme-switch,
 .menu-item i,
 .menu-item svg,
 .fixed-button i,
 .fixed-button svg {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.3s ease,
+    color 0.2s ease !important;
 
   &:hover {
-    transform: scale(1.2) translateY(-2px) !important;
+    transform: scale(1.2) translateY(-3px) !important;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
     color: var(--global-link-hover-color) !important;
   }
 
   &:active {
-    transform: scale(0.9) !important;
+    animation: spring-bounce 0.4s ease !important;
   }
 }
 
-// Search Button Specific Interaction
 .search-button.search-toggle svg {
   transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6) !important;
 }
@@ -139,7 +273,9 @@ html.dark {
   transform: rotate(90deg) scale(1.1) !important;
 }
 
-// Bento Grid - Footer Application
+// ==============================
+// 4. Bento Grid Footer with 3D Depth
+// ==============================
 .footer-container {
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -148,27 +284,58 @@ html.dark {
   text-align: left !important;
 
   .footer-line {
+    position: relative;
     margin: 0 !important;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     padding: 1.75rem;
-    background: var(--bgColor-accent-muted, rgba(0, 0, 0, 0.03));
+    background: var(--liquid-bg-secondary);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
     border-radius: 20px;
-    border: 1px solid var(--glass-border, rgba(0, 0, 0, 0.05));
+    border: 1px solid var(--liquid-border-light);
+    border-bottom-color: var(--liquid-border-dark);
+    border-right-color: var(--liquid-border-dark);
+    box-shadow: var(--liquid-inner-glow), var(--liquid-shadow);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
+    // 3D 变换基础
+    transform-style: preserve-3d;
+
     &:hover {
-      transform: translateY(-8px);
-      background: var(--bgColor-accent-emphasis, rgba(0, 0, 0, 0.06));
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-      border-color: var(--global-link-hover-color);
+      transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
+      box-shadow: var(--liquid-inner-glow), var(--liquid-shadow-hover);
+      border-color: var(--accent-primary);
+    }
+
+    // 空间阴影
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 10%;
+      right: 10%;
+      height: 16px;
+      background: radial-gradient(ellipse at center,
+          rgba(0, 0, 0, 0.12) 0%,
+          transparent 70%);
+      filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    &:hover::before {
+      opacity: 1;
     }
 
     // Asymmetric Bento effect
     &:first-child {
       grid-column: span 2;
-      background: linear-gradient(135deg, var(--bgColor-accent-muted), var(--bgColor-secondary));
+      background: linear-gradient(135deg,
+          var(--liquid-bg-secondary),
+          var(--liquid-bg-primary));
 
       @media (max-width: 900px) {
         grid-column: span 1;
@@ -202,11 +369,13 @@ html.dark {
 
       a {
         color: var(--global-link-color);
-        transition: color 0.2s ease;
+        transition: color 0.2s ease, transform 0.2s ease;
+        display: inline-block;
 
         &:hover {
           color: var(--global-link-hover-color);
           text-decoration: none;
+          transform: translateX(2px);
         }
       }
     }
@@ -218,6 +387,84 @@ html.dark {
       flex-wrap: wrap;
       gap: 0.5rem;
       align-items: center;
+    }
+  }
+}
+
+// ==============================
+// 5. Responsive & Performance
+// ==============================
+@media (max-width: 768px) {
+  :root {
+    --liquid-blur: 16px; // 降低模糊强度，提升性能
+  }
+
+  header#header-desktop,
+  header#header-mobile .header-container {
+    border-radius: 0 !important;
+  }
+
+  .footer-container {
+    padding: 2rem 1rem !important;
+    grid-template-columns: 1fr;
+
+    .footer-line {
+      &:first-child {
+        grid-column: span 1;
+      }
+
+      // 移动端减少 3D 效果
+      &:hover {
+        transform: translateY(-4px);
+      }
+    }
+  }
+}
+
+// 减少动画偏好
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// 性能优化：GPU 加速
+.fixed-button,
+header,
+#toc-auto,
+.footer-line {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+// 不支持 backdrop-filter 的降级方案
+@supports not (backdrop-filter: blur(10px)) {
+
+  header#header-desktop,
+  header#header-mobile .header-container,
+  #toc-auto,
+  #toc-dialog,
+  .search-dropdown .dropdown-menu,
+  .fixed-button,
+  .footer-line {
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  html.dark {
+
+    header#header-desktop,
+    header#header-mobile .header-container,
+    #toc-auto,
+    #toc-dialog,
+    .search-dropdown .dropdown-menu,
+    .fixed-button,
+    .footer-line {
+      background: rgba(45, 45, 45, 0.95) !important;
     }
   }
 }
