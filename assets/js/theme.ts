@@ -604,16 +604,20 @@ function initToc() {
     ) as HTMLCollectionOf<HTMLHeadingElement>;
     const headerIsFixed =
       document.body.getAttribute("header-desktop") !== "normal";
-    const headerHeight = document.getElementById("header-desktop").offsetHeight;
+    const headerDesktop = document.getElementById("header-desktop");
+    const headerHeight = headerDesktop ? headerDesktop.offsetHeight : 0;
     const TOP_SPACING = 20 + (headerIsFixed ? headerHeight : 0);
-    const minTocTop = toc.offsetTop;
+    const minTocTop = toc ? toc.offsetTop : 0;
     const minScrollTop =
       minTocTop - TOP_SPACING + (headerIsFixed ? 0 : headerHeight);
+    // Cache toc height to avoid reflow in scroll handler
+    let cachedTocHeight = toc ? toc.offsetHeight : 0;
     window._tocOnScroll =
       window._tocOnScroll ||
       (() => {
-        const footerTop = document.getElementById("post-footer").offsetTop;
-        const maxTocTop = footerTop - toc.getBoundingClientRect().height;
+        const postFooter = document.getElementById("post-footer");
+        const footerTop = postFooter ? postFooter.offsetTop : document.body.scrollHeight;
+        const maxTocTop = footerTop - cachedTocHeight;
         const maxScrollTop =
           maxTocTop - TOP_SPACING + (headerIsFixed ? 0 : headerHeight);
         if (window.newScrollTop < minScrollTop) {
