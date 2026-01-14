@@ -281,8 +281,8 @@ header#header-mobile {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 1rem 1rem !important;
+  gap: 0;
+  padding: 0.75rem 1rem !important;
   text-align: center !important;
 
   .footer-line {
@@ -300,7 +300,7 @@ header#header-mobile {
 
     .footer-block-content {
       font-size: 0.875rem;
-      line-height: 1.8;
+      line-height: 1.4;
       color: var(--fgColor-muted, #8d8d8d);
 
       a {

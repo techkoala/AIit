@@ -55,12 +55,12 @@ const SUPPORTED_METHODS = ["GET"];
 function isBlacklisted(url) {
   return CACHE_BLACKLIST.length > 0
     ? !CACHE_BLACKLIST.filter((rule) => {
-        if (typeof rule === "function") {
-          return !rule(url);
-        } else {
-          return false;
-        }
-      }).length
+      if (typeof rule === "function") {
+        return !rule(url);
+      } else {
+        return false;
+      }
+    }).length
     : false;
 }
 
@@ -98,13 +98,19 @@ function getTTL(url) {
 function installServiceWorker() {
   return Promise.all([
     caches.open(CACHE_VERSIONS.assets).then((cache) => {
-      return cache.addAll(BASE_CACHE_FILES);
+      return cache.addAll(BASE_CACHE_FILES).catch((err) => {
+        console.warn('Failed to cache base files:', err);
+      });
     }),
     caches.open(CACHE_VERSIONS.offline).then((cache) => {
-      return cache.addAll(OFFLINE_CACHE_FILES);
+      return cache.addAll(OFFLINE_CACHE_FILES).catch((err) => {
+        console.warn('Failed to cache offline files:', err);
+      });
     }),
     caches.open(CACHE_VERSIONS.notFound).then((cache) => {
-      return cache.addAll(NOT_FOUND_CACHE_FILES);
+      return cache.addAll(NOT_FOUND_CACHE_FILES).catch((err) => {
+        console.warn('Failed to cache 404 files:', err);
+      });
     }),
   ]).then(() => {
     return self.skipWaiting();
