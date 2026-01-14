@@ -274,108 +274,42 @@ header#header-mobile {
 }
 
 // ==============================
-// 4. Bento Grid Footer with 3D Depth
+// 4. Simple Centered Footer
 // ==============================
 .footer-container {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  padding: 3rem 2rem !important;
-  text-align: left !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem !important;
+  text-align: center !important;
 
   .footer-line {
-    position: relative;
     margin: 0 !important;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 1.75rem;
-    background: var(--liquid-bg-secondary);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border-radius: 20px;
-    border: 1px solid var(--liquid-border-light);
-    border-bottom-color: var(--liquid-border-dark);
-    border-right-color: var(--liquid-border-dark);
-    box-shadow: var(--liquid-inner-glow), var(--liquid-shadow);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.25rem 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
 
-    // 3D 变换基础
-    transform-style: preserve-3d;
-
-    &:hover {
-      transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
-      box-shadow: var(--liquid-inner-glow), var(--liquid-shadow-hover);
-      border-color: var(--accent-primary);
-    }
-
-    // 空间阴影
-    &::before {
-      content: '';
-      position: absolute;
-      bottom: -16px;
-      left: 10%;
-      right: 10%;
-      height: 16px;
-      background: radial-gradient(ellipse at center,
-          rgba(0, 0, 0, 0.12) 0%,
-          transparent 70%);
-      filter: blur(8px);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-
-    &:hover::before {
-      opacity: 1;
-    }
-
-    // Asymmetric Bento effect
-    &:first-child {
-      grid-column: span 2;
-      background: linear-gradient(135deg,
-          var(--liquid-bg-secondary),
-          var(--liquid-bg-primary));
-
-      @media (max-width: 900px) {
-        grid-column: span 1;
-      }
-    }
-
-    // Hide separators in Bento mode
-    &::after {
-      display: none !important;
-    }
-
-    .icp-splitter {
-      display: none !important;
-    }
-
+    // 隐藏标题（简洁模式不需要）
     .footer-title {
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--fgColor-muted);
-      margin-bottom: 0.5rem;
-      display: block;
-      opacity: 0.6;
+      display: none;
     }
 
     .footer-block-content {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--fgColor-default);
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: var(--fgColor-muted, #8d8d8d);
 
       a {
         color: var(--global-link-color);
-        transition: color 0.2s ease, transform 0.2s ease;
-        display: inline-block;
+        transition: color 0.2s ease;
 
         &:hover {
           color: var(--global-link-hover-color);
           text-decoration: none;
-          transform: translateX(2px);
         }
       }
     }
@@ -383,16 +317,228 @@ header#header-mobile {
     .stack-links,
     .copyright-info,
     .stats-info {
-      display: flex;
+      display: inline-flex;
       flex-wrap: wrap;
       gap: 0.5rem;
       align-items: center;
+      justify-content: center;
+    }
+
+    // 恢复分隔符显示
+    .icp-splitter {
+      display: inline !important;
     }
   }
 }
 
 // ==============================
-// 5. Responsive & Performance
+// 5. Dynamic Light Highlight (JS 配合)
+// ==============================
+header#header-desktop,
+#toc-auto,
+#toc-dialog,
+.search-dropdown .dropdown-menu,
+.admonition,
+.highlight {
+  position: relative;
+  overflow: hidden;
+
+  // 动态光晕层
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: radial-gradient(400px circle at var(--highlight-x, 50%) var(--highlight-y, 50%),
+        rgba(255, 255, 255, 0.25) 0%,
+        transparent 50%);
+    opacity: var(--highlight-opacity, 0);
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
+}
+
+html.dark {
+
+  header#header-desktop,
+  #toc-auto,
+  #toc-dialog,
+  .search-dropdown .dropdown-menu,
+  .admonition,
+  .highlight {
+    &::after {
+      background: radial-gradient(400px circle at var(--highlight-x, 50%) var(--highlight-y, 50%),
+          rgba(255, 255, 255, 0.12) 0%,
+          transparent 50%);
+    }
+  }
+}
+
+// ==============================
+// 6. 3D Depth on Code Blocks & Admonitions
+// ==============================
+.highlight {
+  position: relative;
+  background: var(--liquid-bg-secondary) !important;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid var(--liquid-border-light);
+  border-bottom-color: var(--liquid-border-dark);
+  border-right-color: var(--liquid-border-dark);
+  border-radius: 12px !important;
+  box-shadow: var(--liquid-inner-glow), var(--liquid-shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--liquid-inner-glow), var(--liquid-shadow-hover);
+  }
+
+  pre {
+    background: transparent !important;
+    margin: 0;
+  }
+}
+
+.admonition {
+  position: relative;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  border: 1px solid var(--liquid-border-light) !important;
+  border-left-width: 4px !important;
+  border-radius: 12px !important;
+  box-shadow: var(--liquid-inner-glow), 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.005);
+    box-shadow: var(--liquid-inner-glow), 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  // 玻璃感背景覆盖
+  &.note {
+    background: rgba(68, 138, 255, 0.08) !important;
+  }
+
+  &.tip {
+    background: rgba(0, 191, 165, 0.08) !important;
+  }
+
+  &.info {
+    background: rgba(0, 184, 212, 0.08) !important;
+  }
+
+  &.warning {
+    background: rgba(255, 145, 0, 0.08) !important;
+  }
+
+  &.danger {
+    background: rgba(255, 23, 68, 0.08) !important;
+  }
+
+  &.important {
+    background: rgba(137, 87, 229, 0.08) !important;
+  }
+}
+
+// ==============================
+// 7. Extended Glass Color System
+// ==============================
+// 渐变边框效果
+.gradient-border {
+  position: relative;
+  background: var(--liquid-bg-primary);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--accent-gradient);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+// 暗色模式专属渐变边框
+html.dark {
+
+  // Header 渐变边框
+  header#header-desktop,
+  header#header-mobile .header-container {
+    border-image: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.1) 100%) 1;
+  }
+
+  // 代码块渐变高光
+  .highlight {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.2) 50%,
+          transparent 100%);
+      pointer-events: none;
+    }
+  }
+
+  // Admonition 增强
+  .admonition {
+    box-shadow: var(--liquid-inner-glow), 0 4px 16px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: var(--liquid-inner-glow), 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+// 行内代码玻璃效果
+code:not(pre code) {
+  background: var(--liquid-bg-secondary) !important;
+  border: 1px solid var(--liquid-border-dark);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+html.dark code:not(pre code) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+// 表格玻璃效果
+table {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--liquid-shadow);
+
+  thead {
+    background: var(--liquid-bg-secondary);
+  }
+}
+
+// ==============================
+// 8. Responsive & Performance
 // ==============================
 @media (max-width: 768px) {
   :root {
@@ -406,17 +552,23 @@ header#header-mobile {
 
   .footer-container {
     padding: 2rem 1rem !important;
-    grid-template-columns: 1fr;
 
     .footer-line {
-      &:first-child {
-        grid-column: span 1;
-      }
 
-      // 移动端减少 3D 效果
+      // 移动端简化
       &:hover {
-        transform: translateY(-4px);
+        transform: none;
       }
+    }
+  }
+
+  // 移动端禁用动态光影（性能考虑）
+  header#header-desktop,
+  #toc-auto,
+  .admonition,
+  .highlight {
+    &::after {
+      display: none !important;
     }
   }
 }
@@ -436,7 +588,8 @@ header#header-mobile {
 .fixed-button,
 header,
 #toc-auto,
-.footer-line {
+.highlight,
+.admonition {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -451,7 +604,8 @@ header,
   #toc-dialog,
   .search-dropdown .dropdown-menu,
   .fixed-button,
-  .footer-line {
+  .highlight,
+  .admonition {
     background: rgba(255, 255, 255, 0.95) !important;
   }
 
@@ -463,7 +617,8 @@ header,
     #toc-dialog,
     .search-dropdown .dropdown-menu,
     .fixed-button,
-    .footer-line {
+    .highlight,
+    .admonition {
       background: rgba(45, 45, 45, 0.95) !important;
     }
   }
