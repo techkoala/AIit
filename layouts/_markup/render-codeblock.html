@@ -8,9 +8,9 @@
 {{- $maxShownLines := $params.code.maxshownlines -}}
 {{- $open := "is-open" -}}
 {{- if eq .Attributes.open nil -}}
-  {{- $open = cond (gt $lines $maxShownLines) "is-closed" "is-open" -}}
+{{- $open = cond (gt $lines $maxShownLines) "is-closed" "is-open" -}}
 {{- else -}}
-  {{- $open = cond (eq .Attributes.open false) "is-closed" "is-open" -}}
+{{- $open = cond (eq .Attributes.open false) "is-closed" "is-open" -}}
 {{- end -}}
 {{- $wrap := .Attributes.wrap | default $params.code.wrap | default false -}}
 {{- $isWrap := cond (eq $wrap true) "is-wrap" "" -}}
@@ -24,72 +24,63 @@
     tw-flex-1 
     tw-justify-between 
     tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
+    ">
+    <button class="
         code-block-button
         tw-mx-2 
         tw-flex
         tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1">{{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "chevron-right") -}}</div>
-          <p class="tw-select-none !tw-my-1">{{ $title }}</p>
-      </button>
+        tw-flex-1" type="button">
+      <div
+        class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1">
+        {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "chevron-right") -}}</div>
+      <p class="tw-select-none !tw-my-1">{{ $title }}</p>
+    </button>
 
-   <div class="tw-flex">
-      <button 
-        class="
+    <div class="tw-flex">
+      <button class="
           line-number-button
           tw-mx-2 
           tw-hidden 
           group-[.is-open]:tw-block 
           group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers">
-          {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "list-ol") -}}
+          print:!tw-hidden" title="Toggle line numbers">
+        {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "list-ol") -}}
       </button>
 
-      <button 
-        class="
+      <button class="
           wrap-code-button
           tw-select-none 
           tw-mx-2 
           tw-hidden 
           group-[.is-open]:tw-block 
           group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap">
-          {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "bars") -}}
+          print:!tw-hidden" title="Toggle code wrap">
+        {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "bars") -}}
       </button>
-      
-      <button 
-        class="
+
+      <button class="
           copy-code-button
           tw-select-none
           tw-mx-2 
           tw-hidden
           group-[.is-open]:tw-block
           hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block">
-            {{- partial "plugin/fontawesome.html" (dict "Style" "regular" "Icon" "copy") -}}
-          </span>
-          <span class="check-icon tw-hidden">
-            {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "check") -}}
-          </span>
+          print:!tw-hidden" title="Copy code">
+        <span class="copy-icon tw-block">
+          {{- partial "plugin/fontawesome.html" (dict "Style" "regular" "Icon" "copy") -}}
+        </span>
+        <span class="check-icon tw-hidden">
+          {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "check") -}}
+        </span>
       </button>
-        
-      <button 
-        class="
+
+      <button class="
           tw-select-none 
           tw-mx-2 
           tw-block 
           group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true">
+          print:!tw-hidden" disabled aria-hidden="true">
         {{- partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "ellipsis-h") -}}
       </button>
     </div>
