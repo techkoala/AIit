@@ -32,10 +32,7 @@ $search.highlightTag "noResultsFound" (T "noResultsFound") | dict "search" | mer
 {{- with .Site.Home.OutputFormats.Get "json" -}}
 {{- $config = dict "type" "fuse" "fuseIndexURL" .RelPermalink | dict "search" | merge $config -}}
 {{- else -}}
-{{- errorf "The output format 'json' is not defined for the home page, Fuse.js requires an json index of the site.
-Please define it in your site configuration. See
-https://github.com/HEIGE-PCloud/DoIt/blob/deaf0c8a98ebf5294d537d5ba2d88bb2b4d62ab9/exampleSite/config/_default/outputs.toml#L4
-as an example." -}}
+{{- errorf "The output format json is not defined for the home page. Please define it in your site configuration." -}}
 {{- end -}}
 {{- $src := cond (eq $cdn.fuseJS nil) (resources.Get "lib/fuse/fuse.min.js").RelPermalink $cdn.fuseJS -}}
 {{- $config = dict "fuse.min.js" $src | merge $config -}}
